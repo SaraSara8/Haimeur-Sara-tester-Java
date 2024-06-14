@@ -45,7 +45,7 @@ public class ParkingServiceTest {
 
             lenient().when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
             
-            //mocker l’appel à la méthode getNbTicket()
+            //mocker l’appel à la méthode getNbTicket().
             lenient().when(ticketDAO.getNbTicket(anyString())).thenReturn(1);
             
             parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
