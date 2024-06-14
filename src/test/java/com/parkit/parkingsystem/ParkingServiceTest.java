@@ -16,6 +16,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Date;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -105,6 +107,25 @@ public class ParkingServiceTest {
     	verify(ticketDAO, Mockito.times(1)).updateTicket(any(Ticket.class));
     	
     }
+    
+    @Test
+    public void testGetNextParkingNumberIfAvailable () {
+    	
+    	// GIVEN
+    	when(inputReaderUtil.readSelection()).thenReturn(1);
+    	when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(1);
+    	
+    	//WHEN
+    	ParkingSpot parkingSpot = parkingService.getNextParkingNumberIfAvailable();
+    	
+    	//THEN
+    	verify(parkingSpotDAO, Mockito.times(1)).getNextAvailableSlot(ParkingType.CAR);
+    	
+    	assertAll(() -> assertEquals(parkingSpot.getId(), 1), () -> assertEquals(parkingSpot.isAvailable(), true));
+    	
+    	
+    }
+
 
     	
 
