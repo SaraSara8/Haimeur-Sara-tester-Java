@@ -125,6 +125,20 @@ public class ParkingServiceTest {
     	
     	
     }
+    
+    @Test
+    public void testGetNextParkingNumberIfAvailableParkingNumberNotFound() {
+    	
+    	//GIVEN
+    	when(inputReaderUtil.readSelection()).thenReturn(1);
+    	lenient().when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(0);
+    	
+    	//WHEN
+    	ParkingSpot parkingSpot = parkingService.getNextParkingNumberIfAvailable();
+    	//THEN
+    	verify(parkingSpotDAO, Mockito.times(1)).getNextAvailableSlot(ParkingType.CAR);
+    	
+    }
 
 
     	
