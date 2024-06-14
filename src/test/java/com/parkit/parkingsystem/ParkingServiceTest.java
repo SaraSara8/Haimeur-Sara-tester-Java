@@ -61,7 +61,7 @@ public class ParkingServiceTest {
         verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
     
     
-        // les ajouts fait dans le cadre du test.
+        // les ajouts fait dans le cadre du test..
     	
     	verify(ticketDAO, Mockito.times(1)).updateTicket(any(Ticket.class));
         verify(ticketDAO, Mockito.times(1)).getTicket(anyString());
