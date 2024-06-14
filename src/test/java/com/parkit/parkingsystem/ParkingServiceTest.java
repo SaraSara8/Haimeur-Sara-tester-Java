@@ -139,6 +139,26 @@ public class ParkingServiceTest {
     	verify(parkingSpotDAO, Mockito.times(1)).getNextAvailableSlot(ParkingType.CAR);
     	
     }
+    
+    
+    
+    @Test
+    public void testGetNextParkingNumberIfAvailableParkingNumberWrongArgument() {
+    	
+    	when(inputReaderUtil.readSelection()).thenReturn(3);
+    	lenient().when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(1);
+    	
+    	
+    	ParkingSpot parkingSpot = parkingService.getNextParkingNumberIfAvailable();
+    	
+    	
+    	assertEquals(null, parkingSpot);
+
+    	
+    	
+    	
+    }
+
 
 
     	
