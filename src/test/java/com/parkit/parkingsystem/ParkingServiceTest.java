@@ -88,6 +88,24 @@ public class ParkingServiceTest {
     	verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
     	verify(ticketDAO, Mockito.times(1)).getNbTicket(anyString());
     }
+    
+    
+    
+    @Test
+    public void processExitingVehicleTestUnableUpdate() {
+   
+    	// GIVEN
+    	
+    	when (ticketDAO.updateTicket(any(Ticket.class))).thenReturn(false);
+    	
+    	//WHEN
+    	parkingService.processExitingVehicle();
+    	
+    	//THEN
+    	verify(ticketDAO, Mockito.times(1)).updateTicket(any(Ticket.class));
+    	
+    }
+
     	
 
 
