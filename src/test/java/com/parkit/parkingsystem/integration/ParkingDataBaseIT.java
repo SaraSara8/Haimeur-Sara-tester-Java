@@ -57,7 +57,7 @@ public class ParkingDataBaseIT {
         parkingService.processIncomingVehicle();
         //TODO: check that a ticket is actualy saved in DB and Parking table is updated with availability
         
-        // Il faut recurper le ticket de la base de donnée puis recuprer le spot et lire l'attribut Available
+        // Il faut recurper le ticket de la base de donnée puis recuprer le spot et lire l'attribut Available.
         String vehicleRegNumber = "ABCDEF";
         Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
         ParkingSpot parkingSpot = ticket.getParkingSpot();
