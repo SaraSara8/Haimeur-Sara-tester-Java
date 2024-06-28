@@ -122,8 +122,7 @@ public class ParkingService {
             // appel de la methode calculateFare avec le paramettre discount
             fareCalculatorService.calculateFare(ticket, discount);
 
-            
-            fareCalculatorService.calculateFare(ticket);
+           
             if(ticketDAO.updateTicket(ticket)) {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
                 parkingSpot.setAvailable(true);
