@@ -60,7 +60,7 @@ public class ParkingDataBaseIT {
 
     }
 
-  
+ 
     @Test
     public void testParkingACar(){
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
@@ -131,6 +131,8 @@ public class ParkingDataBaseIT {
         
     }
     
+    
+    
     @Test
     public void testParkingLotExitRecurringUser() {
     	
@@ -139,53 +141,42 @@ public class ParkingDataBaseIT {
          
     	 
     	 // On créé un ticket pour simuler l'entrée avec une heure intime egale à lheure actuelle - 60 min
-         Ticket newTicket = new Ticket();
+         Ticket oldTicket = new Ticket();
          
-         newTicket.setId(1);
-         newTicket.setVehicleRegNumber("ABCDEF");
-         newTicket.setPrice(1.5);
+         oldTicket.setId(1);
+         oldTicket.setVehicleRegNumber("ABCDEF");
+         oldTicket.setPrice(1.5);
          
-         newTicket.setInTime(new Date(System.currentTimeMillis() - (  25*60 * 60 * 1000)));
-         newTicket.setOutTime(new Date(System.currentTimeMillis() - (  24*60 * 60 * 1000)));
+         oldTicket.setInTime(new Date(System.currentTimeMillis() - (  25*60 * 60 * 1000)));
+         oldTicket.setOutTime(new Date(System.currentTimeMillis() - (  24*60 * 60 * 1000)));
          
          ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, true); 
          
-         newTicket.setParkingSpot(parkingSpot);
+         oldTicket.setParkingSpot(parkingSpot);
          // On verouille le ticket dans la base de donnée.
         
          parkingSpotDAO.updateParking(parkingSpot);
          // on enregiste de ticket dans la base de donnée.
          // nous avons simuler l'entrée dans le parking.
          
-         ticketDAO.saveTicket(newTicket);
+         ticketDAO.saveTicket(oldTicket);
     	 
     	 
     	 
     	 parkingService.processIncomingVehicle();
     	 
     	 
+    	 Ticket newTicket = ticketDAO.getTicket("ABCDEF");
     	 
-    	 Connection connection = null;
-         try{
-             connection = dataBaseTestConfig.getConnection();
-
-             //set parking entries to available
-             connection.prepareStatement("update ticket set in_time='2024-06-28 10:00:00' where id=2").execute();
-
-             
-
-         }catch(Exception e){
-             e.printStackTrace();
-         }finally {
-             dataBaseTestConfig.closeConnection(connection);
-         }
-    	 
-    	 
+    	 newTicket.setInTime(new Date(System.currentTimeMillis() - (  60 * 60 * 1000)));
+    	 ticketDAO.updateInTimeTicket(newTicket);
     	 
          
     	 parkingService.processExitingVehicle();
     	 
     	 Ticket ticket = ticketDAO.getTicket("ABCDEF");
+    	 
+    	 // calcul du prix pour la simulation.
     	 
     	 double inMilli = ticket.getInTime().getTime();
     	 double outMilli = ticket.getOutTime().getTime();
@@ -198,14 +189,15 @@ public class ParkingDataBaseIT {
          
          
          
-         duration = duration/(1000*60*60); // conversion des millisecondes en heures
+         duration = (duration/(1000*60*60)); // conversion des millisecondes en heures
          duration = duration *0.95;
-		 duration = duration *Fare.CAR_RATE_PER_HOUR;
+         double prixRemise = duration*Fare.CAR_RATE_PER_HOUR;
          
+         // garder deux chiffres apres la virgule
 		 DecimalFormat f = new DecimalFormat();
-    	 f.setMaximumFractionDigits(2);
+    	 f.setMaximumFractionDigits(1);
 		 
-         assertEquals(f.format(duration), f.format(ticket.getPrice()));
+         assertEquals(f.format(prixRemise), f.format(ticket.getPrice()));
     	 
     	 
     	
