@@ -35,6 +35,13 @@ public class ParkingService {
                 parkingSpot.setAvailable(false);
                 parkingSpotDAO.updateParking(parkingSpot);//allot this parking space and mark it's availability as false
 
+             // Le système vérifie si cette plaque d’immatriculation a déjà été utilisée
+                //compter combien de tickets sont enregistrés pour un véhicule.
+                if (ticketDAO.getNbTicket(vehicleRegNumber) > 0) {
+                	
+                	System.out.println("Heureux de vous revoir ! En tant qu’utilisateur régulier de notre parking, vous allez obtenir une remise de 5%");
+                }
+                
                 Date inTime = new Date();
                 Ticket ticket = new Ticket();
                 //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
@@ -44,14 +51,12 @@ public class ParkingService {
                 ticket.setPrice(0);
                 ticket.setInTime(inTime);
                 ticket.setOutTime(null);
+                
+                
+                
                 ticketDAO.saveTicket(ticket);
                 
-                // Le système vérifie si cette plaque d’immatriculation a déjà été utilisée
-                //compter combien de tickets sont enregistrés pour un véhicule.
-                if (ticketDAO.getNbTicket(vehicleRegNumber) > 0) {
-                	
-                	System.out.println("Heureux de vous revoir ! En tant qu’utilisateur régulier de notre parking, vous allez obtenir une remise de 5%");
-                }
+                
                 
                 
                 System.out.println("Generated Ticket and saved in DB");
