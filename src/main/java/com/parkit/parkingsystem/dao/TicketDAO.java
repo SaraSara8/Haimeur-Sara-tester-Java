@@ -87,6 +87,26 @@ public class TicketDAO {
         return false;
     }
     
+    // nouvelle methode pour la mise à jour de IN_TIME
+    public boolean updateInTimeTicket(Ticket ticket) {
+        Connection con = null;
+        try {
+            con = dataBaseConfig.getConnection();
+            PreparedStatement ps = con.prepareStatement(DBConstants.UPDATE_INTIME_TICKET);
+            
+            ps.setTimestamp(1, new Timestamp(ticket.getInTime().getTime()));
+            ps.setInt(2,ticket.getId());
+            ps.execute();
+            return true;
+        }catch (Exception ex){
+            logger.error("Error saving ticket info",ex);
+        }finally {
+            dataBaseConfig.closeConnection(con);
+        }
+        return false;
+    }
+    
+    
     
     public int getNbTicket(String vehicleRegNumber ) {
     	Connection con = null;
